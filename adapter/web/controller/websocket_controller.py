@@ -1,29 +1,14 @@
 import json
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from pydantic import ValidationError
 from typing import List
 import asyncio
 
 router = APIRouter()
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: List[WebSocket] = []
-
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-
-    async def send_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
-
-manager = ConnectionManager()
-
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
+    await websocket.accept()
     try:
         while True:
             data = await websocket.receive_text()
@@ -35,19 +20,21 @@ async def websocket_endpoint(websocket: WebSocket):
 
                     await asyncio.sleep(5)
                     response = f"Received keyword: {keyword}"
-                    await manager.send_message(response, websocket)
+                    await websocket.send_text(response)
                 else:
                     response = "keyword not found"
-                await websocket.close()
                 break
 
+            except ValueError as e:
+                error_message = f"Validation error: {e}"
+                await websocket.send_text(error_message)
+
             except Exception:
-                await manager.send_message("Invalid Json format", websocket)
-                await websocket.close()
+                await websocket.send_text(response)
                 break
 
     except WebSocketDisconnect:
         pass
 
     finally:
-        manager.disconnect(websocket)
+        await websocket.close()
