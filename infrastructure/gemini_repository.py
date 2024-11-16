@@ -1,0 +1,36 @@
+from typing import Self, Type
+from abc import ABC, abstractmethod
+from application.config import AppConfig
+from application.port.llm_port import LlmPort
+from langchain.prompts import PromptTemplate
+from langchain_google_genai import ChatGoogleGenerativeAI
+from pydantic import BaseModel
+from typing import Self
+
+
+class GeminiRepository(LlmPort):
+    def __init__(self):
+        self._config = None
+        self._model = None
+
+    def set_config(self, config: AppConfig) -> Self:
+        self._config = config
+        self._model = ChatGoogleGenerativeAI(
+            model="gemini-1.5-pro", api_key=config.env.gemini_api_key
+        )
+        return self
+
+    async def request(
+        self, prompt: str, input_data: str, response_type: Type[BaseModel]
+    ):
+
+        prompt_template = PromptTemplate(
+            input_variables=["keyword"],
+            template=prompt,
+        )
+        prompt = prompt_template.format(keyword=input_data)
+
+        llm = self._model.with_structured_output(response_type)
+        response = llm.invoke(prompt)
+
+        return response
