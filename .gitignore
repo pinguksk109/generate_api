@@ -24,8 +24,8 @@ Pipfile.lock
 
 # Docker関連
 *.dockerignore
-Dockerfile
-docker-compose.yml
+docker/data/*
+docker/minio/*
 
 # テスト関連
 *.log
