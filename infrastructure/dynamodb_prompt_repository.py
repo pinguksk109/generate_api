@@ -30,7 +30,7 @@ class DynamoPromptRepository(PromptPort):
         try:
             response = self._client.query(
                 TableName=self._table,
-                KeyConditionExpression="promptId = :v1",
+                KeyConditionExpression="prompt_id = :v1",
                 ExpressionAttributeValues={":v1": {"S": prompt_id.value}},
             )
         except ClientError as e:
