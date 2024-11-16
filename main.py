@@ -1,35 +1,22 @@
+from dotenv import load_dotenv
+from os.path import join, dirname
 import uvicorn
-from adapter.web.controller.websocket_controller import router
+from adapter.controller.websocket_controller import router
 from starlette.types import ASGIApp, Receive, Scope, Send
 from fastapi import FastAPI
 
+load_dotenv(verbose=True)
+
+dotenv_path = join(dirname(__file__), ".env")
+load_dotenv(dotenv_path)
+
 app = FastAPI()
 
-# Middleware test
-class WebSocketAuthMiddleware:
-    def __init__(self, app: ASGIApp):
-        self.app = app
 
-    async def __call__(self, scope: Scope, receive: Receive, send: Send):
-
-        if scope["type"] == "websocket":
-
-            await send({
-                "type": "websocket.accept"
-            })
-            await send({
-                "type": "websocket.close",
-                "code": 1002
-            })
-            return
-
-        await self.app(scope, receive, send)
-
-# app.add_middleware(WebSocketAuthMiddleware)
-
-@router.get('/health')
+@router.get("/health")
 async def health_check():
     return "Hello"
+
 
 app.include_router(router)
 
