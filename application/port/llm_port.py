@@ -1,7 +1,9 @@
-from typing import Self, Type
 from abc import ABC, abstractmethod
-from application.config import AppConfig
+from typing import Self, Type
+
 from pydantic import BaseModel
+
+from application.config import AppConfig
 
 
 class LlmPort(ABC):

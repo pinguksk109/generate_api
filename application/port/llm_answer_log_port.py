@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from application.config import AppConfig
 from typing import Self
+
+from application.config import AppConfig
 
 
 class LlmAnswerLogPort(ABC):

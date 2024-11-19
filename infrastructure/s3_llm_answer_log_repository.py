@@ -1,8 +1,10 @@
 from typing import Self
+
 import boto3
 from botocore.exceptions import ClientError
-from application.port.llm_answer_log_port import LlmAnswerLogPort
+
 from application.config import AppConfig
+from application.port.llm_answer_log_port import LlmAnswerLogPort
 
 
 class S3LlmAnswerLogRepository(LlmAnswerLogPort):

@@ -1,11 +1,11 @@
 from typing import Self, Type
-from abc import ABC, abstractmethod
-from application.config import AppConfig
-from application.port.llm_port import LlmPort
+
 from langchain.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel
-from typing import Self
+
+from application.config import AppConfig
+from application.port.llm_port import LlmPort
 
 
 class GeminiRepository(LlmPort):

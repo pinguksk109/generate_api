@@ -1,9 +1,11 @@
+from enum import Enum
+from typing import Self
+
 import boto3
 from botocore.exceptions import ClientError
-from typing import Self
+
 from application.config import AppConfig
 from application.port.prompt_port import PromptPort
-from enum import Enum
 
 
 class PromptIds(Enum):

@@ -1,7 +1,8 @@
-from typing import Self, Type
 from abc import ABC, abstractmethod
-from application.config import AppConfig
 from enum import Enum
+from typing import Self, Type
+
+from application.config import AppConfig
 
 
 class PromptPort(ABC):

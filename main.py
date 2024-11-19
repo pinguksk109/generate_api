@@ -1,9 +1,11 @@
-from dotenv import load_dotenv
-from os.path import join, dirname
+from os.path import dirname, join
+
 import uvicorn
-from adapter.controller.websocket_controller import router
-from starlette.types import ASGIApp, Receive, Scope, Send
+from dotenv import load_dotenv
 from fastapi import FastAPI
+from starlette.types import ASGIApp, Receive, Scope, Send
+
+from adapter.controller.websocket_controller import router
 
 load_dotenv(verbose=True)
 
