@@ -10,5 +10,5 @@ class LlmAnswerLogPort(ABC):
         pass
 
     @abstractmethod
-    def save(self, key: str) -> None:
+    def save(self, key: str, body: str) -> None:
         pass

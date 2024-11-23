@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Self
+from typing import Self, Type
 
 import boto3
 from botocore.exceptions import ClientError
@@ -28,7 +28,7 @@ class DynamoPromptRepository(PromptPort):
         self._table = self._config.env.llm_prompt_table
         return self
 
-    async def get_prompt(self, prompt_id: Enum) -> str:
+    async def get_prompt(self, prompt_id: Type[Enum]) -> str:
         try:
             response = self._client.query(
                 TableName=self._table,
