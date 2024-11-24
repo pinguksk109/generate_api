@@ -1,4 +1,5 @@
 import json
+import logging
 
 from fastapi import APIRouter, WebSocket, Depends
 from pydantic import ValidationError
@@ -10,6 +11,10 @@ from adapter.transfer.llm_transfer import (
 from adapter.helper.generate_helper import GenerateHelper
 from application.config import AppConfig, state
 from application.bus import create_usecase
+from domain.exception.sensitive_exception import SensitiveException
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -30,11 +35,14 @@ async def websocket_endpoint(
         await websocket.send_text(response.model_dump_json())
         code, reason = 1000, ""
 
-    except ValidationError as e:
-        print(e)
+    except ValidationError:
+        logger.exception("Validation error occurred")
         code, reason = 1003, "Validation Error"
-    except Exception as e:
-        print(e)
+    except SensitiveException:
+        logger.exception("Sensitive exception occurred")
+        code, reason = 4000, "Sensitive Error"
+    except Exception:
+        logger.exception("Unexpected error occurred")
         code, reason = 1011, "Internal Error"
     finally:
         await websocket.close(code, reason)

@@ -14,6 +14,7 @@ from infrastructure.s3_llm_answer_log_repository import (
 )
 from domain.llm_answer import Answer
 from domain.logic.llm_interaction_helper import LlmInteractionHelper
+from domain.exception.sensitive_exception import SensitiveException
 
 
 class GenerateInput(IInput, BaseModel):
@@ -52,6 +53,9 @@ class GenerateUsecase(IUsecase):
         response = await repository.llm.request(
             prompt, self.input_data.keyword, Answer
         )
+
+        if response.is_sensitive:
+            raise SensitiveException(response.answer)
 
         log_key = LlmInteractionHelper.get_log_key(self.input_data.keyword)
         repository.llm_answer_log.save(log_key, response.model_dump_json())
