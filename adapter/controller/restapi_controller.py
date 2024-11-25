@@ -29,7 +29,7 @@ class GenerateResponse(BaseModel):
     answer: str
 
 
-@router.get("/generate", response_model=GenerateResponse)
+@router.post("/generate", response_model=GenerateResponse)
 async def generate_endpoint(
     body: LlmGenerateRequest, config: AppConfig = Depends(state)
 ):
