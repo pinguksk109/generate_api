@@ -22,7 +22,6 @@ app = FastAPI()
 async def validation_exception_handler(
     request: Request, exc: RequestValidationError
 ):
-    print(exc)
     error_details = []
     for error in exc.errors():
         field = error.get("loc", ["unknown"])[-1]
