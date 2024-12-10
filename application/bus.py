@@ -1,5 +1,5 @@
 from application.usecase.base import IInput, IUsecase
-from application.usecase.generate_usecase import GenerateUsecase, GenerateInput
+from application.usecase.generate_usecase import GenerateInput, GenerateUsecase
 
 
 def create_usecase(input_data: IInput) -> IUsecase:

@@ -2,13 +2,12 @@ from os.path import dirname, join
 
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import FastAPI
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from adapter.controller import websocket_controller
-from adapter.controller import restapi_controller
-from fastapi.exceptions import RequestValidationError
+from adapter.controller import restapi_controller, websocket_controller
 
 load_dotenv(verbose=True)
 
@@ -22,6 +21,7 @@ app = FastAPI()
 async def validation_exception_handler(
     request: Request, exc: RequestValidationError
 ):
+
     error_details = []
     for error in exc.errors():
         field = error.get("loc", ["unknown"])[-1]
@@ -29,7 +29,7 @@ async def validation_exception_handler(
         if message:
             error_details.append({"field": field, "message": message})
 
-    if request.url.path == "/generate":
+    if request.url.path == "/ws/generate":
         for error in error_details:
             print(f"Validation error in field: {error['field']}")
 
@@ -42,6 +42,15 @@ async def validation_exception_handler(
 @app.get("/health")
 async def health_check():
     return "Hello"
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(websocket_controller.router)
