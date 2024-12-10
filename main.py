@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from adapter.controller import websocket_controller
 from adapter.controller import restapi_controller
@@ -22,6 +23,7 @@ app = FastAPI()
 async def validation_exception_handler(
     request: Request, exc: RequestValidationError
 ):
+
     error_details = []
     for error in exc.errors():
         field = error.get("loc", ["unknown"])[-1]
@@ -42,6 +44,15 @@ async def validation_exception_handler(
 @app.get("/health")
 async def health_check():
     return "Hello"
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # React
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(websocket_controller.router)

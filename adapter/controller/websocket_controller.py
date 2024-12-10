@@ -6,7 +6,6 @@ from pydantic import ValidationError
 
 from adapter.transfer.llm_transfer import (
     LlmGenerateRequest,
-    LlmGenerateResponse,
 )
 from adapter.helper.generate_helper import GenerateHelper
 from application.config import AppConfig, state
@@ -19,24 +18,24 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.websocket("/ws")
+@router.websocket("/ws/generate")
 async def websocket_endpoint(
     websocket: WebSocket, config: AppConfig = Depends(state)
 ):
+    code, reason = 1000, ""
     await websocket.accept()
     try:
         data = await websocket.receive_text()
-        message = json.loads(data)
+        body = LlmGenerateRequest(**json.loads(data))
+        input_data = GenerateHelper.from_request(config, body)
 
-        request = LlmGenerateRequest(keyword=message["keyword"])
-        input_data = GenerateHelper.from_request(config, request)
         output_data = await create_usecase(input_data).handle()
+
         response = GenerateHelper.from_output(output_data)
-        await websocket.send_text(response.model_dump_json())
-        code, reason = 1000, ""
+        await websocket.send_json(response.model_dump())
 
     except ValidationError:
-        logger.exception("Validation error occurred")
+        logger.exception(f"Validation error occurred")
         code, reason = 1003, "Validation Error"
     except SensitiveException:
         logger.exception("Sensitive exception occurred")
