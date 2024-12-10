@@ -31,7 +31,7 @@ async def validation_exception_handler(
         if message:
             error_details.append({"field": field, "message": message})
 
-    if request.url.path == "/generate":
+    if request.url.path == "/ws/generate":
         for error in error_details:
             print(f"Validation error in field: {error['field']}")
 
@@ -48,7 +48,7 @@ async def health_check():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
