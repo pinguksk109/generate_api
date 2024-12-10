@@ -1,15 +1,13 @@
 import json
 import logging
 
-from fastapi import APIRouter, WebSocket, Depends
+from fastapi import APIRouter, Depends, WebSocket
 from pydantic import ValidationError
 
-from adapter.transfer.llm_transfer import (
-    LlmGenerateRequest,
-)
 from adapter.helper.generate_helper import GenerateHelper
-from application.config import AppConfig, state
+from adapter.transfer.llm_transfer import LlmGenerateRequest
 from application.bus import create_usecase
+from application.config import AppConfig, state
 from domain.exception.sensitive_exception import SensitiveException
 
 logging.basicConfig(level=logging.INFO)

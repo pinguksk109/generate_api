@@ -2,14 +2,12 @@ from os.path import dirname, join
 
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import FastAPI
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-from fastapi.middleware.cors import CORSMiddleware
-
-from adapter.controller import websocket_controller
-from adapter.controller import restapi_controller
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from adapter.controller import restapi_controller, websocket_controller
 
 load_dotenv(verbose=True)
 
