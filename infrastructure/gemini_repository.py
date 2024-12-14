@@ -20,15 +20,7 @@ class GeminiRepository(LlmPort):
         )
         return self
 
-    async def request(
-        self, prompt: str, input_data: str, response_type: Type[BaseModel]
-    ):
-
-        prompt_template = PromptTemplate(
-            input_variables=["keyword"],
-            template=prompt,
-        )
-        prompt = prompt_template.format(keyword=input_data)
+    async def request(self, prompt: str, response_type: Type[BaseModel]):
 
         llm = self._model.with_structured_output(response_type)
         response = llm.invoke(prompt)

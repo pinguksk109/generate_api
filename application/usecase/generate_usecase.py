@@ -8,6 +8,7 @@ from application.usecase.base import IInput, IOutput, IUsecase
 from domain.exception.sensitive_exception import SensitiveException
 from domain.llm_answer import Answer
 from domain.logic.llm_interaction_helper import LlmInteractionHelper
+from domain.logic.prompt_helper import PromptHelper
 from infrastructure.dynamodb_prompt_repository import (
     DynamoPromptRepository,
     PromptIds,
@@ -49,11 +50,12 @@ class GenerateUsecase(IUsecase):
     async def handle(self) -> GenerateOutput:
         repository = self._reposiory()
 
-        prompt = await repository.prompt.get_prompt(PromptIds.TRIVIA)
-
-        response = await repository.llm.request(
-            prompt, self.input_data.keyword, Answer
+        prompt_template = await repository.prompt.get_prompt(PromptIds.TRIVIA)
+        prompt = PromptHelper.getPrompt(
+            prompt_template, self.input_data.keyword
         )
+
+        response = await repository.llm.request(prompt, Answer)
 
         if response.is_sensitive:
             raise SensitiveException(response.answer)
