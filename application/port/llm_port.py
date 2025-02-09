@@ -13,6 +13,6 @@ class LlmPort(ABC):
 
     @abstractmethod
     async def request(
-        self, prompt: str, input_data: str, response_type: Type[BaseModel]
+        self, prompt: str, response_type: Type[BaseModel]
     ):
         pass

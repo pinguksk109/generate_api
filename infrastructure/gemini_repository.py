@@ -1,6 +1,5 @@
 from typing import Self, Type
 
-from langchain.prompts import PromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel
 
