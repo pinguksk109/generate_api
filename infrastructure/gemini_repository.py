@@ -20,7 +20,6 @@ class GeminiRepository(LlmPort):
         return self
 
     async def request(self, prompt: str, response_type: Type[BaseModel]):
-
         llm = self._model.with_structured_output(response_type)
         response = llm.invoke(prompt)
 
