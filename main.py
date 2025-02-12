@@ -7,7 +7,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from adapter.controller import restapi_controller, websocket_controller
+from adapter.controller import restapi_controller, websocket_controller, trivia_controller
 
 load_dotenv(verbose=True)
 
@@ -55,6 +55,7 @@ app.add_middleware(
 
 app.include_router(websocket_controller.router)
 app.include_router(restapi_controller.router)
+app.include_router(trivia_controller.router)
 
 
 if __name__ == "__main__":

@@ -18,9 +18,6 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-router = APIRouter()
-
-
 class GenerateRequest(BaseModel):
     keyword: str = Field(..., min_length=1, max_length=10)
 
