@@ -1,14 +1,11 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from typing import List, Optional
 
 class Item(BaseModel):
-    quiz: str = Field
-    choices: List[str] = Field
-    answer: int = Field
-    explanation: str = Field
-
-    # class Config:
-    #     populate_by_name = True
+    quiz: str
+    choices: List[str]
+    answer: int
+    explanation: str
 
 class TriviaGenerateRequest(BaseModel):
     category: Optional[str]
