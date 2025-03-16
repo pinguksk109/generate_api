@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package trivia;
+
+service TriviaService {
+    rpc GenerateTrivia (TriviaRequest) returns (TriviaResponse);   
+}
+
+message TriviaRequest {
+    string category = 1;
+}
+
+message TriviaResponse {
+    string quiz = 1;
+    repeated string choices = 2;
+    int32 answer = 3;
+    string explanation = 4;
+}

@@ -31,6 +31,8 @@ class TriviaQuizUsecase(IUsecase):
         return self.Repository(llm=llm)
 
     async def handle(self) -> TriviaQuizOutput:
+        print("ほげらっちょ")
+        print(self.input_data.config)
         repository = self._repository()
 
         if self.input_data.category is not None:
