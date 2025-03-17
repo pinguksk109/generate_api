@@ -3,7 +3,7 @@
 import grpc
 import warnings
 
-from proto import trivia_pb2 as proto_dot_trivia__pb2
+import trivia_pb2 as trivia__pb2
 
 GRPC_GENERATED_VERSION = '1.71.0'
 GRPC_VERSION = grpc.__version__
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in proto/trivia_pb2_grpc.py depends on'
+        + f' but the generated code in trivia_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -36,8 +36,8 @@ class TriviaServiceStub(object):
         """
         self.GenerateTrivia = channel.unary_unary(
                 '/trivia.TriviaService/GenerateTrivia',
-                request_serializer=proto_dot_trivia__pb2.TriviaRequest.SerializeToString,
-                response_deserializer=proto_dot_trivia__pb2.TriviaResponse.FromString,
+                request_serializer=trivia__pb2.TriviaRequest.SerializeToString,
+                response_deserializer=trivia__pb2.TriviaResponse.FromString,
                 _registered_method=True)
 
 
@@ -55,8 +55,8 @@ def add_TriviaServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GenerateTrivia': grpc.unary_unary_rpc_method_handler(
                     servicer.GenerateTrivia,
-                    request_deserializer=proto_dot_trivia__pb2.TriviaRequest.FromString,
-                    response_serializer=proto_dot_trivia__pb2.TriviaResponse.SerializeToString,
+                    request_deserializer=trivia__pb2.TriviaRequest.FromString,
+                    response_serializer=trivia__pb2.TriviaResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -84,8 +84,8 @@ class TriviaService(object):
             request,
             target,
             '/trivia.TriviaService/GenerateTrivia',
-            proto_dot_trivia__pb2.TriviaRequest.SerializeToString,
-            proto_dot_trivia__pb2.TriviaResponse.FromString,
+            trivia__pb2.TriviaRequest.SerializeToString,
+            trivia__pb2.TriviaResponse.FromString,
             options,
             channel_credentials,
             insecure,
