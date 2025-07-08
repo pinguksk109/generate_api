@@ -1,6 +1,4 @@
-import sys
-import io
-
+from pythonjsonlogger import jsonlogger
 import logging
 import logging.config
 
@@ -9,11 +7,9 @@ LOG_CONFIG = {
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
-            "format": (
-                "[%(asctime)s.%(msecs)03d][%(levelname)s][%(process)s] "
-                "%(name)s %(funcName)s:%(lineno)s - %(message)s"
-            ),
-            "datefmt": "%Y-%m-%d %H:%M:%S",
+            "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "format": "%(asctime)s %(levelname)s %(name)s %(module)s %(funcName)s %(lineno)d %(message)s",
+            "json_ensure_ascii": False,
         }
     },
     "handlers": {
@@ -35,20 +31,21 @@ LOG_CONFIG = {
         },
         "boto3": {
             "handlers": ["console"],
+            "level": "WARNING",
             "propagate": False,
         },
         "botocore": {
             "handlers": ["console"],
+            "level": "WARNING",
             "propagate": False,
         },
         "sqlalchemy.engine": {
             "handlers": ["console"],
+            "level": "WARNING",
             "propagate": False,
         },
     },
 }
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 logging.config.dictConfig(LOG_CONFIG)
-
 logger = logging.getLogger("ai_log_test")
