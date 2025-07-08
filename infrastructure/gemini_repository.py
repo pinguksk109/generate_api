@@ -15,7 +15,8 @@ class GeminiRepository(LlmPort):
     def set_config(self, config: AppConfig) -> Self:
         self._config = config
         self._model = ChatGoogleGenerativeAI(
-            model="gemini-1.5-pro", api_key=config.env.gemini_api_key
+            model="gemini-2.5-flash",
+            api_key=config.env.gemini_api_key,
         )
         return self
 
